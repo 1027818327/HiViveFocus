@@ -12,85 +12,93 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
 using wvr;
-using WVR_Log;
+using WaveVR_Log;
 using System.Collections.Generic;
 
 public class GOEventTrigger : MonoBehaviour
 {
-	private static string LOG_TAG = "WaveVR_GOEventTrigger";
-	private Vector3 startPosition;
-	private Color defaultColor = Color.gray;
-	private Color changedColor = Color.red;
+    private static string LOG_TAG = "WaveVR_GOEventTrigger";
+    private Vector3 startPosition;
+    private Color defaultColor = Color.gray;
+    private Color changedColor = Color.red;
 
-	void Start ()
-	{
-		startPosition = transform.localPosition;
-		Log.d(LOG_TAG, "Start()");
-	}
+    void Start ()
+    {
+        startPosition = transform.localPosition;
 
-	// --------------- Event Handling begins --------------
-	public void OnEnter()
-	{
-		Log.d (LOG_TAG, "OnEnter");
-		ChangeColor (true);
-	}
+        #if UNITY_EDITOR
+        if (Application.isEditor) return;
+        #endif
+        Log.d(LOG_TAG, "Start() get instance of WaveVR_PermissionManager");
+    }
 
-	public void OnTrigger()
-	{
-		Log.d (LOG_TAG, "OnTrigger");
-		TeleportRandomly ();
-	}
+    // --------------- Event Handling begins --------------
+    public void OnEnter()
+    {
+        Log.d (LOG_TAG, "OnEnter");
+        ChangeColor (true);
+    }
 
-	public void OnExit()
-	{
-		Log.d (LOG_TAG, "OnExit");
-		ChangeColor (false);
-	}
+    public void OnTrigger()
+    {
+        Log.d (LOG_TAG, "OnTrigger");
+        TeleportRandomly ();
+    }
 
-	public void OnQuitGame()
-	{
-		Log.d(LOG_TAG, "Quit Game");
-		Application.Quit();
-	}
+    public void OnExit()
+    {
+        Log.d (LOG_TAG, "OnExit");
+        ChangeColor (false);
+    }
 
-	public void OnGazeReset ()
-	{
-		transform.localPosition = startPosition;
-		ChangeColor (false);
-	}
+    public void OnQuitGame()
+    {
+        Log.d(LOG_TAG, "Quit Game");
+        Application.Quit();
+    }
 
-	public void OnShowButton()
-	{
-		Log.d(LOG_TAG, "OnShowButton");
-		transform.gameObject.SetActive (true);
-	}
+    public void OnGazeReset ()
+    {
+        transform.localPosition = startPosition;
+        ChangeColor (false);
+    }
 
-	public void OnHideButton()
-	{
-		Log.d(LOG_TAG, "OnHideButton");
-		transform.gameObject.SetActive (false);
-	}
+    public void OnShowButton()
+    {
+        #if UNITY_EDITOR
+        Debug.Log ("OnShowButton");
+        #endif
+        transform.gameObject.SetActive (true);
+    }
 
-	// --------------- Event Handling ends --------------
+    public void OnHideButton()
+    {
+        #if UNITY_EDITOR
+        Debug.Log ("OnHideButton");
+        #endif
+        transform.gameObject.SetActive (false);
+    }
 
-	public void ChangeColor(string color)
-	{
-		if (color.Equals("blue"))
-			GetComponent<Renderer>().material.color = Color.blue;
-		else if (color.Equals("cyan"))
-			GetComponent<Renderer>().material.color = Color.cyan;
-	}
+    // --------------- Event Handling ends --------------
 
-	private void ChangeColor(bool change)
-	{
-		GetComponent<Renderer>().material.color = change ? changedColor : defaultColor;
-	}
+    public void ChangeColor(string color)
+    {
+        if (color.Equals("blue"))
+            GetComponent<Renderer>().material.color = Color.blue;
+        else if (color.Equals("cyan"))
+            GetComponent<Renderer>().material.color = Color.cyan;
+    }
 
-	private void TeleportRandomly () {
-		Vector3 direction = UnityEngine.Random.onUnitSphere;
-		direction.y = Mathf.Clamp (direction.y, 0.5f, 1f);
-		direction.z = Mathf.Clamp (direction.z, 3f, 10f);
-		float distance = 2 * UnityEngine.Random.value + 1.5f;
-		transform.localPosition = direction * distance;
-	}
+    private void ChangeColor(bool change)
+    {
+        GetComponent<Renderer>().material.color = change ? changedColor : defaultColor;
+    }
+
+    private void TeleportRandomly () {
+        Vector3 direction = UnityEngine.Random.onUnitSphere;
+        direction.y = Mathf.Clamp (direction.y, 0.5f, 1f);
+        direction.z = Mathf.Clamp (direction.z, 3f, 10f);
+        float distance = 2 * UnityEngine.Random.value + 1.5f;
+        transform.localPosition = direction * distance;
+    }
 }

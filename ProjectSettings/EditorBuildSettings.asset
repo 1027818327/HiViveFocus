@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/HTC.UnityPlugin/ViveInputUtility/Examples/7.RoleBindingExample/RoleBindingExample.unity
     guid: bc4e44a3b6c99684384abd378f45e9fe
-  - enabled: 1
+  - enabled: 0
     path: Assets/Demo2/2.unity
     guid: ce4d78885438fd44eb5f05417ee6829c
+  - enabled: 1
+    path: Assets/Demo2/3.unity
+    guid: 97693e6ad2fd8e849b67b92e4ac5ea47
